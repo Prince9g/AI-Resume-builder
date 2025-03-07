@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "framer-motion": "^12.4.10",
+    "react-modal": "^3.16.3"
+  }
+}
