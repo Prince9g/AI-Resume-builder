@@ -7,9 +7,9 @@ import FAQ from './components/FAQ'
 
 const App = () => {
   return (
-    <div>
-      <FAQ/>
-      {/* <Builder/> */}
+    <div className="bg-slate-50">
+      {/* <FAQ/> */}
+      <Builder/>
       {/* <Templates/> */}
       {/* <ModifyPdf/> */}
     </div>
