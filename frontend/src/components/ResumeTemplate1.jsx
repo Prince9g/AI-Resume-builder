@@ -1,103 +1,202 @@
 import React from "react";
 
-const ResumeTemplate1 = () => {
+const ResumeTemplate1 = ({ formData }) => {
+  const { name, email, phone, address, links, education, experience, projects, skills, honors } = formData;
+
+  // Function to format description with bullet points
+  const formatDescription = (description) => {
+    if (!description) return null;
+    return description.split("\n").map((line, index) => {
+      if (line.startsWith("-")) {
+        return <li key={index}>{line.replace("-", "•")}</li>;
+      }
+      return <li key={index}>{line}</li>;
+    });
+  };
+
+  // Check if the form has any data (excluding the name)
+  const hasData =
+    email ||
+    phone ||
+    address ||
+    links.some((link) => link.type || link.url) ||
+    education.some((edu) => edu.university || edu.degree || edu.gpa || edu.location || edu.startDate || edu.endDate) ||
+    experience.some((exp) => exp.company || exp.role || exp.location || exp.startDate || exp.endDate || exp.description) ||
+    projects.some((project) => project.name || project.liveLink || project.repoLink || project.techStack || project.description) ||
+    skills.some((skill) => skill.ProgrammingLanguages || skill.CoreCompetencies || skill.Frameworks || skill.TechStack || skill.DeveloperTools || skill.AdditionalSkills) ||
+    honors.some((honor) => honor);
+
   return (
     <div className="w-[794px] h-[1123px] mx-auto p-10 bg-white shadow-lg border border-gray-300">
       {/* Header */}
       <div className="text-center pb-2">
-        <h1 className="text-3xl font-bold">First Last</h1>
-        <p className="text-sm text-gray-600">xyz@email.com | 1234567890 | 123 XYZ Street, Bangalore, IN</p>
-        <p className="text-sm font-semibold mt-2">
-            {/* needs to be the link */}
-          <span className="text-blue-600">HackerRank</span> | GitHub | LinkedIn | Twitter | Portfolio
-        </p>
+        <h1 className="text-3xl font-bold">{name || "First Last"}</h1>
+
+        {/* Show additional details only if data exists */}
+        {hasData && (
+          <>
+            <p className="text-sm text-gray-600">
+              {email && `${email} | `}
+              {phone && `${phone} | `}
+              {address}
+            </p>
+            <p className="text-sm font-semibold mt-2">
+              {links.map(
+                (link, index) =>
+                  link.type &&
+                  link.url && (
+                    <span key={index} className="text-black">
+                      <span className="mr-1">{index !== 0 && " | "}</span>
+                      <a href={link.url} target="_blank" rel="noopener noreferrer">
+                        {link.type}
+                      </a>{" "}
+                    </span>
+                  )
+              )}
+            </p>
+          </>
+        )}
       </div>
 
       {/* Education Section */}
-      <div className="mt-4">
-        <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Education</h2>
-        <div className="flex justify-between items-center">
-            <p className="font-semibold">XYZ University</p>
-            <p className="text-sm">New Delhi, India</p>
+      {education.some((edu) => edu.university || edu.degree || edu.gpa || edu.location || edu.startDate || edu.endDate) && (
+        <div className="mt-4">
+          <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Education</h2>
+          {education.map(
+            (edu, index) =>
+              (edu.university || edu.degree || edu.gpa || edu.location || edu.startDate || edu.endDate) && (
+                <div key={index}>
+                  <div className="flex justify-between items-center">
+                    <p className="font-semibold">{edu.university}</p>
+                    <p className="text-sm">{edu.location}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p className="text-sm italic">
+                      {edu.degree} {edu.gpa && `GPA: ${edu.gpa}`}
+                    </p>
+                    <p className="text-sm">
+                      {edu.startDate} - {edu.endDate}
+                    </p>
+                  </div>
+                </div>
+              )
+          )}
         </div>
-        <div className="flex justify-between">
-            <p className="text-sm italic">B.Tech Computer Science GPA: 9.1</p>
-            <p className="text-sm">June 2017 - December 2020</p>
-        </div>
-        <div className="flex justify-between items-center mt-2">
-            <p className="font-semibold">XYZ School</p>
-            <p className="text-sm">Mathura, India</p>
-        </div>
-        <div className="flex justify-between items-center">
-            <p className="text-sm italic">InterMediate Percentage: 90.1%</p>
-            <p className="text-sm">June 2017 - July 2018</p>
-        </div>
-      </div>
+      )}
 
       {/* Experience Section */}
-      <div className="mt-4">
-        <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Experience</h2>
-        <div className="flex justify-between items-center">
-        <p className="font-semibold">HackerRank | Software Engineer 2</p>
-        <p className="text-sm text-gray-600">Bengaluru, India | Jan 21 - Present</p>
+      {experience.some((exp) => exp.company || exp.role || exp.location || exp.startDate || exp.endDate || exp.description) && (
+        <div className="mt-4">
+          <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Experience</h2>
+          {experience.map(
+            (exp, index) =>
+              (exp.company || exp.role || exp.location || exp.startDate || exp.endDate || exp.description) && (
+                <div key={index}>
+                  <div className="flex justify-between items-center">
+                    <p className="font-semibold">
+                      {exp.company} | {exp.role}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {exp.location} | {exp.startDate} - {exp.endDate}
+                    </p>
+                  </div>
+                  <ul className="list-disc pl-5 text-sm">
+                    {formatDescription(exp.description)}
+                  </ul>
+                </div>
+              )
+          )}
         </div>
-        
-        <ul className="list-disc pl-5 text-sm">
-          <li>Write a one or two-paragraph explanation of what the project aims to accomplish.</li>
-          <li>Avoid delving deep into background or past projects.</li>
-        </ul>
-        <div className="flex justify-between items-center">
-        <p className="font-semibold mt-2">Amazon | SDE 1</p>
-        <p className="text-sm text-gray-600">Bangalore, India | March 2020 - Dec 2020</p>
-        </div>
-        <ul className="list-disc pl-5 text-sm">
-          <li>Write a one or two-paragraph explanation of what the project aims to accomplish.</li>
-          <li>Avoid delving deep into background or past projects.</li>
-        </ul>
-      </div>
+      )}
 
-    {/* Projects Section */}
-    <div className="mt-4">
-        <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Projects</h2>
-        <div className='flex justify-between'>
-            <p className="font-semibold">Project 1 <span className="text-blue-600">Live Link</span> | <span className="text-blue-600">Repo Link</span></p>
-            <p className="text-sm">JavaScript, HTML, CSS</p>
+      {/* Projects Section */}
+      {projects.some((project) => project.name || project.liveLink || project.repoLink || project.techStack || project.description) && (
+        <div className="mt-4">
+          <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Projects</h2>
+          {projects.map(
+            (project, index) =>
+              (project.name || project.liveLink || project.repoLink || project.techStack || project.description) && (
+                <div key={index}>
+                  <div className="flex justify-between">
+                    <p className="font-semibold">
+                      {project.name}{" "}
+                      {project.liveLink && (
+                        <span className="text-blue-600">
+                          <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
+                            Live Link
+                          </a>
+                        </span>
+                      )}{" "}
+                      |{" "}
+                      {project.repoLink && (
+                        <span className="text-blue-600">
+                          <a href={project.repoLink} target="_blank" rel="noopener noreferrer">
+                            Repo Link
+                          </a>
+                        </span>
+                      )}
+                    </p>
+                    <p className="text-sm">{project.techStack}</p>
+                  </div>
+                  <ul className="list-disc pl-5 text-sm">
+                    {formatDescription(project.description)}
+                  </ul>
+                </div>
+              )
+          )}
         </div>
-        <ul className="list-disc pl-5 text-sm">
-          <li>Write a one or two-paragraph explanation of what the project aims to accomplish.</li>
-          <li>Avoid delving deep into background or past projects.</li>
-        </ul>
-        <div className='flex justify-between mt-2'>
-            <p className="font-semibold">Project 1 <span className="text-blue-600">Live Link</span> | <span className="text-blue-600">Repo Link</span></p>
-            <p className="text-sm">JavaScript, HTML, CSS</p>
-        </div>
-        <ul className="list-disc pl-5 text-sm">
-          <li>Write a one or two-paragraph explanation of what the project aims to accomplish.</li>
-          <li>Avoid delving deep into background or past projects.</li>
-        </ul>
-      </div>
+      )}
 
       {/* Skills Section */}
-      <div className="mt-4">
-        <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Skills</h2>
-        <p className="text-sm"><strong>Programming Languages: </strong> C/C++, Java, JavaScript, Python, SQL</p>
-        <p className="text-sm"><strong>Core competencies: </strong> MongoDB, PostgreSQL</p>
-        <p className="text-sm"><strong>Frameworks/Libraries: </strong> React.js, Vue.js, Redux, Express.js</p>
-        <p className="text-sm"><strong>Tech Stack: </strong> MongoDB, PostgreSQL</p>
-        <p className="text-sm"><strong>Developers' Tool: </strong> MongoDB, PostgreSQL</p>
-        <p className="text-sm"><strong>Additional Skills: </strong> MongoDB, PostgreSQL</p>
-      </div>
-
-      
+      {skills.some((skill) => skill.ProgrammingLanguages || skill.CoreCompetencies || skill.Frameworks || skill.TechStack || skill.DeveloperTools || skill.AdditionalSkills) && (
+        <div className="mt-4">
+          <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Skills</h2>
+          {skills.map(
+            (skill, index) =>
+              (skill.ProgrammingLanguages || skill.CoreCompetencies || skill.Frameworks || skill.TechStack || skill.DeveloperTools || skill.AdditionalSkills) && (
+                <div key={index}>
+                  <p className="text-sm">
+                    <strong>Programming Languages: </strong>
+                    {skill.ProgrammingLanguages}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Core competencies: </strong>
+                    {skill.CoreCompetencies}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Frameworks/Libraries: </strong>
+                    {skill.Frameworks}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Tech Stack: </strong>
+                    {skill.TechStack}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Developers' Tool: </strong>
+                    {skill.DeveloperTools}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Additional Skills: </strong>
+                    {skill.AdditionalSkills}
+                  </p>
+                </div>
+              )
+          )}
+        </div>
+      )}
 
       {/* Honors & Awards Section */}
-      <div className="mt-4">
-        <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Honors & Awards</h2>
-        <ul className="list-disc pl-5 text-sm">
-          <li>Write a one or two-paragraph explanation of what the project aims to accomplish.</li>
-          <li>Avoid delving deep into background or past projects.</li>
-        </ul>
-      </div>
+      {honors.some((honor) => honor) && (
+        <div className="mt-4">
+          <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Honors & Awards</h2>
+          <ul className="list-disc pl-5 text-sm">
+            {honors.map(
+              (honor, index) =>
+                honor && <li key={index}>{honor}</li>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
