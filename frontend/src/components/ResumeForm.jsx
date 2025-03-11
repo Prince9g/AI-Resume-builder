@@ -82,7 +82,7 @@ const ResumeForm = ({formData, setFormData}) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-1/3 mx-auto min-h-screen p-6 rounded-lg shadow-md">
+    <form onSubmit={handleSubmit} className="w-1/3 min-h-screen p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-4">Resume Details</h2>
       <div className="border flex flex-col gap-8 p-4 rounded-lg">
         {/* Section 1 - Personal Information */}
