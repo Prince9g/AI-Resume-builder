@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 Modal.setAppElement('#root'); // Prevent accessibility issues
 
 const Template = ({ name, image }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate("/builder");
+  }
   return (
     <div className="flex flex-col gap-4 items-center">
       {/* Image container with hover effect */}
@@ -24,7 +28,7 @@ const Template = ({ name, image }) => {
       {/* Try it button */}
       <button
         className="p-2 pr-4 pl-4 border rounded-lg bg-emerald-300 hover:bg-emerald-500"
-        onClick={() => setModalIsOpen(true)}
+        onClick={handleButtonClick}
       >
         Try it
       </button>

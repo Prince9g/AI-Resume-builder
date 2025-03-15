@@ -35,7 +35,7 @@ const Signin = () => {
     <div className="flex justify-center items-center h-screen">
       <ToastContainer position="top-right" autoClose={2000} theme="colored" />
       <div className="flex flex-col items-center justify-center gap-5 w-96 p-4 border border-gray-300 rounded-md">
-        <h1 className="text-4xl font-bold">Sign In as Admin</h1>
+        <h1 className="text-4xl font-bold">Sign In</h1>
         {/* Sign In form */}
         <form className="flex flex-col gap-4 w-full m-2" onSubmit={onSubmitHandler}>
           {/* email */}

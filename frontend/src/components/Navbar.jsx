@@ -1,0 +1,55 @@
+import React, { useState } from 'react'
+import { IoMdNotificationsOutline } from "react-icons/io";
+import { FaArrowRightFromBracket } from "react-icons/fa6";
+const Navbar = () => {
+    const [toggle, setToggle] = useState('ai');
+  return (
+    <div className="flex justify-between items-center p-4 bg-sky-100">
+        {/* logo  */}
+      <div className="text-xl">ResumeConnect</div>
+      {/* navigation links */}
+      {/* bg-sky-600 text-white rounded-full px-2 py-1.5  */}
+      <div className="relative ml-10">
+        <div 
+            className={`absolute top-1/2 left-1 h-9 w-[120px] bg-sky-600 rounded-full transition-all duration-300 ease-in-out transform -translate-y-1/2 ${toggle === 'ai' ? "translate-x-full" : "translate-x-0"}`}
+        ></div>
+        <div className="flex items-center justify-center border border-black rounded-full gap-2">
+            <a href="#" className={`relative p-2 z-10 border-black ${toggle === 'resume' ? "text-white" : "text-black"}`} onClick={() => setToggle('resume')}>Resume Builder</a>
+            <a href="#" className={`relative p-3 z-10 ${toggle === 'ai' ? "text-white": "text-black"}`} onClick={() => setToggle('ai')}>AI Assistance</a>
+        </div>
+      </div>
+      {/* dropdown menu */}
+      <div className="">
+        <div className="flex justify-center items-center text-lg gap-8">
+            <div className="relative group">
+            <a href="#" className="border rounded-xl px-3 py-1 bg-sky-50">Menu</a>
+            <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white text-indigo-600 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Resumes</a>
+              <a href="#" className="block px-4 py-2 hover:bg-gray-100">History</a>
+              <a href="#" className="block px-4 py-2 hover:bg-gray-100">Settings</a>
+              <a href="#" className="block px-4 py-2 hover:bg-gray-100">Help</a>
+            </div>
+            </div>
+            
+            <a href="#"><IoMdNotificationsOutline className="text-3xl"/></a>
+            <div>
+                <div className="relative group cursor-pointer">
+                    <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg" alt="user" className="rounded-full w-12 h-12"/>
+                    <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white text-indigo-600 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">Profile</a>
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+                            <div className="flex justify-between items-center">
+                                <span>Logout</span>
+                                <FaArrowRightFromBracket className="text-red-600"/>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Navbar
