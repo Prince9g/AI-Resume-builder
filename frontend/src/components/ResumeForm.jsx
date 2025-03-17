@@ -10,7 +10,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 const ResumeForm = ({formData, setFormData}) => {
 
   const [openSections, setOpenSections] = useState({
-    personal: true,
+    personal: false,
     education: false,
     experience: false,
     projects: false,

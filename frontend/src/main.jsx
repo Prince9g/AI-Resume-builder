@@ -9,6 +9,7 @@ import Builder from './components/Builder.jsx'
 import Templates from './components/Templates.jsx'
 import Homepage from './components/Homepage.jsx'
 import Dashboard from './components/Dashboard.jsx'
+import AI from './components/AI.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,14 +19,6 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Homepage/>,
-      },
-      {
-        path: '/builder',
-        element: <Builder />,
-      },
-      {
-        path: '/templates',
-        element: <Templates/>,
       },
       {
         path: '*',
@@ -39,12 +32,27 @@ const router = createBrowserRouter([
         path: '/sign-in',
         element: <Signin/>,
       },
-      {
-        path: 'dashboard',
-        element: <Dashboard/>,
-      }
+      
     ],
-  }
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard/>,
+    children: [
+      {
+        path: 't1',
+        element: <Templates/>,
+      },
+      {
+        path: 't1/build',
+        element: <Builder/>
+      },
+      {
+        path: 'ai',
+        element: <AI/>
+      }
+    ]
+  },
 ]);
 createRoot(document.getElementById('root')).render(
   <StrictMode>

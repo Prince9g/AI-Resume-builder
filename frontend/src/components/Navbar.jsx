@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 const Navbar = () => {
-    const [toggle, setToggle] = useState('ai');
+    const [toggle, setToggle] = useState('resume');
   return (
     <div className="flex justify-between items-center p-4 bg-sky-100">
         {/* logo  */}
@@ -14,8 +15,8 @@ const Navbar = () => {
             className={`absolute top-1/2 left-1 h-9 w-[120px] bg-sky-600 rounded-full transition-all duration-300 ease-in-out transform -translate-y-1/2 ${toggle === 'ai' ? "translate-x-full" : "translate-x-0"}`}
         ></div>
         <div className="flex items-center justify-center border border-black rounded-full gap-2">
-            <a href="#" className={`relative p-2 z-10 border-black ${toggle === 'resume' ? "text-white" : "text-black"}`} onClick={() => setToggle('resume')}>Resume Builder</a>
-            <a href="#" className={`relative p-3 z-10 ${toggle === 'ai' ? "text-white": "text-black"}`} onClick={() => setToggle('ai')}>AI Assistance</a>
+            <Link to="t1" className={`cursor-pointer relative p-2 z-10 border-black ${toggle === 'resume' ? "text-white" : "text-black"}`} onClick={() => setToggle('resume')}>Resume Builder</Link>
+            <Link to="ai" className={`cursor-pointer relative p-2 pr-3 z-10 ${toggle === 'ai' ? "text-white": "text-black"}`} onClick={() => setToggle('ai')}>AI Assistance</Link>
         </div>
       </div>
       {/* dropdown menu */}

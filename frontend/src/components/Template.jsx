@@ -9,7 +9,8 @@ const Template = ({ name, image }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    navigate("/builder");
+    console.log("Button clicked");
+    navigate("/dashboard/t1/build");
   }
   return (
     <div className="flex flex-col gap-4 items-center">
