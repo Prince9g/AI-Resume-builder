@@ -9,7 +9,6 @@ const Template = ({ name, image }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    console.log("Button clicked");
     navigate("/dashboard/t1/build");
   }
   return (

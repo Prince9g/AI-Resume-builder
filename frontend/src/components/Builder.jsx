@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import ResumeForm from './ResumeForm'
 import ResumeTemplate1 from './ResumeTemplate1'
 import html2pdf from "html2pdf.js";
-
+import { MdOutlineFileDownload } from "react-icons/md";
 const Builder = () => {
   const [formData, setFormData] = useState({
       name: "",
@@ -34,7 +34,7 @@ const Builder = () => {
 
 
   return (
-    <div>
+    <div className="relative">
     <div className="flex items-start justify-evenly gap-4">
       <ResumeForm formData={formData} setFormData={setFormData}/>
       <div ref={resumeRef} className="shadow-md">
@@ -44,9 +44,9 @@ const Builder = () => {
     </div>
     <button 
         onClick={handleDownloadPDF} 
-        className="px-4 py-2 bg-green-600 text-white rounded-md mt-4"
+        className="p-3 bg-sky-400 text-white rounded-full absolute right-2 top-4 hover:bg-sky-600 transition-all duration-300"
       >
-        Download PDF
+        <MdOutlineFileDownload className="text-3xl"/>
       </button>
     </div>
   )

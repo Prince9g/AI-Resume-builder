@@ -27,7 +27,7 @@ const ResumeTemplate1 = ({ formData }) => {
     honors.some((honor) => honor);
 
   return (
-    <div className="w-[794px] h-[1123px] p-10 bg-white shadow-lg border border-gray-300">
+    <div className="w-[794px] h-[1123px] p-10 bg-white shadow-lg border border-gray-300 relative">
       {/* Header */}
       <div className="text-center pb-2">
         <h1 className="text-3xl font-bold">{name || "First Last"}</h1>

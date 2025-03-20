@@ -5,27 +5,59 @@ const ResumeSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  summary: { type: String },
+  address: { type: String },
+  
+  links: [
+    {
+      type: { type: String },
+      url: { type: String, required: true }
+    }
+  ],
+
   education: [
     {
-      school: String,
-      degree: String,
-      fieldOfStudy: String,
-      startYear: String,
-      endYear: String,
-    },
+      university: { type: String, required: true },
+      degree: { type: String, required: true },
+      gpa: { type: String },
+      location: { type: String },
+      startDate: { type: String },
+      endDate: { type: String }
+    }
   ],
+
   experience: [
     {
-      company: String,
-      position: String,
-      startDate: String,
-      endDate: String,
-      description: String,
-    },
+      company: { type: String, required: true },
+      role: { type: String, required: true },
+      location: { type: String },
+      startDate: { type: String },
+      endDate: { type: String },
+      description: { type: String }
+    }
   ],
-  skills: [String],
-  template: { type: String, required: true }, // Template selection (1,2,3)
+
+  projects: [
+    {
+      name: { type: String, required: true },
+      liveLink: { type: String },
+      repoLink: { type: String },
+      techStack: { type: String },
+      description: { type: String }
+    }
+  ],
+
+  skills: {
+    ProgrammingLanguages: { type: String },
+    CoreCompetencies: { type: String },
+    Frameworks: { type: String },
+    TechStack: { type: String },
+    DeveloperTools: { type: String },
+    AdditionalSkills: { type: String }
+  },
+
+  honors: [{ type: String }],
+
+  template: { type: String, required: true } // Template selection (1,2,3)
 });
 
 const Resume = mongoose.model("Resume", ResumeSchema);
