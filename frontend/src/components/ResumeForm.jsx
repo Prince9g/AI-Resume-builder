@@ -6,6 +6,7 @@ import { PiHandCoinsLight } from "react-icons/pi";
 import { LuProjector } from "react-icons/lu";
 import { SlBadge } from "react-icons/sl";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import axios from "axios";
 
 const ResumeForm = ({formData, setFormData}) => {
 
@@ -76,9 +77,16 @@ const ResumeForm = ({formData, setFormData}) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      const res = await axios.post('http://localhost:8080/api/resume', {
+        formData
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

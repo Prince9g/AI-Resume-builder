@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
+import Resume from "../models/resume.model.js";
 
 export const register = async (req, res) => {
   const errors = validationResult(req);
@@ -45,10 +46,12 @@ export const login = async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     user = await User.findOne({ email }).select('-password');
+    const resumes = await Resume.find({ user: user._id });
     return res.cookie('token', token, {httpOnly:true, sameSite:'strict', maxAge: 1*24*60*60*1000}).json({
         message:`Welcome back ${user.name}`,
         success:true,
-        user
+        user, 
+        resumes
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");

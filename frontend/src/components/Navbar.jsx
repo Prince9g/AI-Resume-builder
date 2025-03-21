@@ -2,8 +2,15 @@ import React, { useState } from 'react'
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/authSlice';
 const Navbar = () => {
     const [toggle, setToggle] = useState('resume');
+    const dispatch = useDispatch();
+
+    const onLogoutHandler = ()=>{
+      dispatch(logoutUser());
+    }
   return (
     <div className="flex justify-between items-center p-4 bg-sky-100">
         {/* logo  */}
@@ -39,7 +46,7 @@ const Navbar = () => {
                     <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white text-indigo-600 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <a href="#" className="block px-4 py-2 hover:bg-gray-100">Profile</a>
                         <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center" onClick={onLogoutHandler}>
                                 <span>Logout</span>
                                 <FaArrowRightFromBracket className="text-red-600"/>
                             </div>

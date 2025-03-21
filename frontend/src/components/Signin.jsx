@@ -4,6 +4,7 @@ import React, { useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { setAuthUser } from '../redux/authSlice';
 const Signin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,10 +18,10 @@ const Signin = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/login", formData);
+      const res = await axios.post("http://localhost:8080/api/auth/login", formData, { withCredentials: true });
       if(res.data.success){
         toast.success(res.data.message);
-        dispatch(setAuthUser(res.data.user));
+        dispatch(setAuthUser({user: res.data.user, resume: res.data.resumes}));
         setTimeout(() => {
           navigate('/dashboard');
         }, 2000);

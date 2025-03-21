@@ -57,7 +57,7 @@ const ResumeSchema = new mongoose.Schema({
 
   honors: [{ type: String }],
 
-  template: { type: String, required: true } // Template selection (1,2,3)
+  template: { type: String} // Template selection (1,2,3)
 });
 
 const Resume = mongoose.model("Resume", ResumeSchema);
