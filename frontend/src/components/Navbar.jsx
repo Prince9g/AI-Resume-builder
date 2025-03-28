@@ -32,7 +32,7 @@ const Navbar = () => {
             <div className="relative group">
             <a href="#" className="border rounded-xl px-3 py-1 bg-sky-50">Menu</a>
             <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white text-indigo-600 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Resumes</a>
+              <Link to="/dashboard/my-resumes" className="block px-4 py-2 hover:bg-gray-100">My Resumes</Link>
               <a href="#" className="block px-4 py-2 hover:bg-gray-100">History</a>
               <a href="#" className="block px-4 py-2 hover:bg-gray-100">Settings</a>
               <a href="#" className="block px-4 py-2 hover:bg-gray-100">Help</a>

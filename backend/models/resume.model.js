@@ -10,14 +10,14 @@ const ResumeSchema = new mongoose.Schema({
   links: [
     {
       type: { type: String },
-      url: { type: String, required: true }
+      url: { type: String}
     }
   ],
 
   education: [
     {
-      university: { type: String, required: true },
-      degree: { type: String, required: true },
+      university: { type: String},
+      degree: { type: String},
       gpa: { type: String },
       location: { type: String },
       startDate: { type: String },
@@ -27,8 +27,8 @@ const ResumeSchema = new mongoose.Schema({
 
   experience: [
     {
-      company: { type: String, required: true },
-      role: { type: String, required: true },
+      company: { type: String},
+      role: { type: String},
       location: { type: String },
       startDate: { type: String },
       endDate: { type: String },
@@ -38,7 +38,7 @@ const ResumeSchema = new mongoose.Schema({
 
   projects: [
     {
-      name: { type: String, required: true },
+      name: { type: String},
       liveLink: { type: String },
       repoLink: { type: String },
       techStack: { type: String },

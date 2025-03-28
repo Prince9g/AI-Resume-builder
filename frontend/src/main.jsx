@@ -13,6 +13,7 @@ import Templates from './components/Templates.jsx';
 import Homepage from './components/Homepage.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import AI from './components/AI.jsx';
+import MyResumes from './components/MyResumes.jsx';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: 't1', element: <Templates /> },
       { path: 't1/build', element: <Builder /> },
       { path: 'ai', element: <AI /> },
+      {path: 'my-resumes', element: <MyResumes/> },
     ],
   },
 ]);

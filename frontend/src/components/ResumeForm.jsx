@@ -80,13 +80,55 @@ const ResumeForm = ({formData, setFormData}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:8080/api/resume', {
-        formData
-      });
+      const res = await axios.post('http://localhost:8080/api/resume', 
+        formData, {withCredentials: true},
+      );
       console.log(res);
     } catch (error) {
       console.log(error);
     }
+    setFormData({
+      name: "",
+    email: "",
+    phone: "",
+    address: "",
+    links: [{ type: "", url: "" }],
+    education: [
+      {
+        university: "",
+        degree: "",
+        gpa: "",
+        location: "",
+        startDate: "",
+        endDate: "",
+      },
+    ],
+    experience: [
+      {
+        company: "",
+        role: "",
+        location: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+      },
+    ],
+    projects: [
+      { name: "", liveLink: "", repoLink: "", techStack: "", description: "" },
+    ],
+    skills: [
+      {
+        ProgrammingLanguages: "",
+        CoreCompetencies: "",
+        Frameworks: "",
+        TechStack: "",
+        DeveloperTools: "",
+        AdditionalSkills: "",
+      },
+    ],
+    honors: [""],
+    });
+    
   };
 
   return (

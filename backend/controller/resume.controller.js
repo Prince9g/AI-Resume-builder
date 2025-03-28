@@ -12,15 +12,18 @@ export const createResume = async (req, res) => {
 };
 
 // Get User Resume
-export const getResume = async (req, res) => {
+export const getUserResumes = async (req, res) => {
   try {
-    const resume = await Resume.findOne({ user: req.user });
-    if (!resume) return res.status(404).json({success: false, message: "Resume not found" });
-    res.json(resume);
+    const resumes = await Resume.find({ user: req.user }); // Fetch all resumes
+    if (resumes.length === 0) {
+      return res.status(404).json({ success: false, message: "No resumes found" });
+    }
+    res.json({ success: true, resumes });
   } catch (err) {
-    res.status(500).send("Server Error");
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
 
 // Update Resume
 export const updateResume = async (req, res) => {
