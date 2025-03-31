@@ -21,9 +21,9 @@ const Signin = () => {
       const res = await axios.post("http://localhost:8080/api/auth/login", formData, { withCredentials: true });
       if(res.data.success){
         toast.success(res.data.message);
-        dispatch(setAuthUser({user: res.data.user, resume: res.data.resumes}));
+        dispatch(setAuthUser({user: res.data.user, resumes: res.data.resumes}));
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/dashboard/t1');
         }, 2000);
 
       }

@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/authSlice';
 const Navbar = () => {
     const [toggle, setToggle] = useState('resume');
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const onLogoutHandler = ()=>{
       dispatch(logoutUser());
+      setTimeout(()=>{
+        navigate('/');
+      }, 3000);
     }
   return (
     <div className="flex justify-between items-center p-4 bg-sky-100">

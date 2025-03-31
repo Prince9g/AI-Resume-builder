@@ -1,21 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
-import persistStore from "redux-persist/es/persistStore";
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+  user: null,
+  resumes: [],
+  loading: false,
+  error: null
+};
 
 const authSlice = createSlice({
-    name:'auth',
-    initialState:{
-        user:null,
+  name: 'auth',
+  initialState,
+  reducers: {
+    setAuthUser: (state, action) => {
+      state.user = action.payload.user;
+      state.resumes = action.payload.resumes || [];
     },
-    reducers:{
-        //actions
-        setAuthUser:(state, action) => {
-            state.user = action.payload;
-        },
-        logoutUser: (state) => {
-            state.user = null;
-          }
-    }
-})
+    logoutUser: (state) => {
+      state.user = null;
+      state.resumes = [];
+    },
+    // Add other auth-related reducers as needed
+  },
+});
 
-export const {setAuthUser, setAuthResume, logoutUser} = authSlice.actions;
+export const { setAuthUser, logoutUser } = authSlice.actions;
 export default authSlice.reducer;

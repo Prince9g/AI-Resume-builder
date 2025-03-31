@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate} from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { setAuthUser } from '../redux/authSlice';
 const SignUp = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({name: '', email: '', password: '', confirmPassword: ''});
@@ -14,14 +16,16 @@ const SignUp = () => {
     if(formData.password !== formData.confirmPassword){
       toast.error("Passwords do not match!");
     }
+    const dispatch = useDispatch();
     try {
       const res = await axios.post("http://localhost:8080/api/auth/register", formData
       )
       console.log(res);
       if(res){
         toast.success(res.data.message);
+        dispatch(setAuthUser({user: res.data.user, resumes: res.data.resumes}));
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/dashboard/t1');
         }, 2000);
       }
     } catch (error) {

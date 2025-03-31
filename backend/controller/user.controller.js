@@ -24,7 +24,8 @@ export const register = async (req, res) => {
     return res.cookie('token', token, {httpOnly:true, sameSite:'strict', maxAge: 1*24*60*60*1000}).json({
         message:`${user.name} registered successfully`,
         success:true,
-        user
+        user,
+        resumes
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");

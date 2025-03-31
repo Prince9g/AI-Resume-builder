@@ -1,7 +1,23 @@
-import React from "react";
-
 const ResumeTemplate1 = ({ formData }) => {
-  const { name, email, phone, address, links, education, experience, projects, skills, honors } = formData;
+  // Safely destructure with defaults
+  const {
+    name = "",
+    email = "",
+    phone = "",
+    address = "",
+    links = [],
+    education = [],
+    experience = [],
+    projects = [],
+    honors = []
+  } = formData || {};
+
+  // Convert all arrays to safe versions
+  const safeLinks = Array.isArray(links) ? links : [];
+  const safeEducation = Array.isArray(education) ? education : [];
+  const safeExperience = Array.isArray(experience) ? experience : [];
+  const safeProjects = Array.isArray(projects) ? projects : [];
+  const safeHonors = Array.isArray(honors) ? honors : [];
 
   // Function to format description with bullet points
   const formatDescription = (description) => {
@@ -19,12 +35,17 @@ const ResumeTemplate1 = ({ formData }) => {
     email ||
     phone ||
     address ||
-    links.some((link) => link.type || link.url) ||
-    education.some((edu) => edu.university || edu.degree || edu.gpa || edu.location || edu.startDate || edu.endDate) ||
-    experience.some((exp) => exp.company || exp.role || exp.location || exp.startDate || exp.endDate || exp.description) ||
-    projects.some((project) => project.name || project.liveLink || project.repoLink || project.techStack || project.description) ||
-    skills.some((skill) => skill.ProgrammingLanguages || skill.CoreCompetencies || skill.Frameworks || skill.TechStack || skill.DeveloperTools || skill.AdditionalSkills) ||
-    honors.some((honor) => honor);
+    safeLinks.some(link => link?.type || link?.url) ||
+    safeEducation.some(edu => 
+      edu?.university || edu?.degree || edu?.gpa || edu?.location || edu?.startDate || edu?.endDate
+    ) ||
+    safeExperience.some(exp => 
+      exp?.company || exp?.role || exp?.location || exp?.startDate || exp?.endDate || exp?.description
+    ) ||
+    safeProjects.some(project => 
+      project?.name || project?.liveLink || project?.repoLink || project?.techStack || project?.description
+    ) ||
+    safeHonors.some(honor => honor);
 
   return (
     <div className="w-[794px] h-[1123px] p-10 bg-white shadow-lg border border-gray-300 relative list-disc text-lg">
@@ -32,7 +53,6 @@ const ResumeTemplate1 = ({ formData }) => {
       <div className="text-center pb-2">
         <h1 className="text-3xl font-bold">{name || "First Last"}</h1>
 
-        {/* Show additional details only if data exists */}
         {hasData && (
           <>
             <p className="text-sm text-gray-600">
@@ -41,15 +61,15 @@ const ResumeTemplate1 = ({ formData }) => {
               {address}
             </p>
             <p className="text-sm font-semibold mt-2">
-              {links.map(
+              {safeLinks.map(
                 (link, index) =>
-                  link.type &&
-                  link.url && (
+                  link?.type &&
+                  link?.url && (
                     <span key={index} className="text-black">
                       <span className="mr-1">{index !== 0 && " | "}</span>
                       <a href={link.url} target="_blank" rel="noopener noreferrer">
                         {link.type}
-                      </a>{" "}
+                      </a>
                     </span>
                   )
               )}
@@ -59,23 +79,25 @@ const ResumeTemplate1 = ({ formData }) => {
       </div>
 
       {/* Education Section */}
-      {education.some((edu) => edu.university || edu.degree || edu.gpa || edu.location || edu.startDate || edu.endDate) && (
+      {safeEducation.some(edu => 
+        edu?.university || edu?.degree || edu?.gpa || edu?.location || edu?.startDate || edu?.endDate
+      ) && (
         <div className="mt-4">
           <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Education</h2>
-          {education.map(
+          {safeEducation.map(
             (edu, index) =>
-              (edu.university || edu.degree || edu.gpa || edu.location || edu.startDate || edu.endDate) && (
-                <div key={index}>
+              (edu?.university || edu?.degree || edu?.gpa || edu?.location || edu?.startDate || edu?.endDate) && (
+                <div key={index} className="mb-4">
                   <div className="flex justify-between items-center">
-                    <p className="font-semibold">{edu.university}</p>
-                    <p className="text-sm">{edu.location}</p>
+                    <p className="font-semibold">{edu?.university || "University Name"}</p>
+                    <p className="text-sm">{edu?.location || "Location"}</p>
                   </div>
                   <div className="flex justify-between">
                     <p className="text-sm italic">
-                      {edu.degree} {edu.gpa && `GPA: ${edu.gpa}`}
+                      {edu?.degree || "Degree"} {edu?.gpa && `GPA: ${edu.gpa}`}
                     </p>
                     <p className="text-sm">
-                      {edu.startDate} - {edu.endDate}
+                      {edu?.startDate || "Start"} - {edu?.endDate || "End"}
                     </p>
                   </div>
                 </div>
@@ -85,24 +107,28 @@ const ResumeTemplate1 = ({ formData }) => {
       )}
 
       {/* Experience Section */}
-      {experience.some((exp) => exp.company || exp.role || exp.location || exp.startDate || exp.endDate || exp.description) && (
+      {safeExperience.some(exp => 
+        exp?.company || exp?.role || exp?.location || exp?.startDate || exp?.endDate || exp?.description
+      ) && (
         <div className="mt-4">
           <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Experience</h2>
-          {experience.map(
+          {safeExperience.map(
             (exp, index) =>
-              (exp.company || exp.role || exp.location || exp.startDate || exp.endDate || exp.description) && (
-                <div key={index}>
+              (exp?.company || exp?.role || exp?.location || exp?.startDate || exp?.endDate || exp?.description) && (
+                <div key={index} className="mb-4">
                   <div className="flex justify-between items-center">
                     <p className="font-semibold">
-                      {exp.company} | {exp.role}
+                      {exp?.company || "Company"} | {exp?.role || "Role"}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {exp.location} | {exp.startDate} - {exp.endDate}
+                      {exp?.location || "Location"} | {exp?.startDate || "Start"} - {exp?.endDate || "End"}
                     </p>
                   </div>
-                  <ul className="list-disc pl-5 text-sm">
-                    {formatDescription(exp.description)}
-                  </ul>
+                  {exp?.description && (
+                    <ul className="list-disc pl-5 text-sm">
+                      {formatDescription(exp.description)}
+                    </ul>
+                  )}
                 </div>
               )
           )}
@@ -110,75 +136,40 @@ const ResumeTemplate1 = ({ formData }) => {
       )}
 
       {/* Projects Section */}
-      {projects.some((project) => project.name || project.liveLink || project.repoLink || project.techStack || project.description) && (
+      {safeProjects.some(project => 
+        project?.name || project?.liveLink || project?.repoLink || project?.techStack || project?.description
+      ) && (
         <div className="mt-4">
           <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Projects</h2>
-          {projects.map(
+          {safeProjects.map(
             (project, index) =>
-              (project.name || project.liveLink || project.repoLink || project.techStack || project.description) && (
-                <div key={index}>
+              (project?.name || project?.liveLink || project?.repoLink || project?.techStack || project?.description) && (
+                <div key={index} className="mb-4">
                   <div className="flex justify-between">
                     <p className="font-semibold">
-                      {project.name}{" "}
-                      {project.liveLink && (
-                        <span className="text-blue-600">
+                      {project?.name || "Project Name"}
+                      {project?.liveLink && (
+                        <span className="text-blue-600 ml-2">
                           <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
                             Live Link
                           </a>
                         </span>
-                      )}{" "}
-                      |{" "}
-                      {project.repoLink && (
-                        <span className="text-blue-600">
+                      )}
+                      {project?.repoLink && (
+                        <span className="text-blue-600 ml-2">
                           <a href={project.repoLink} target="_blank" rel="noopener noreferrer">
                             Repo Link
                           </a>
                         </span>
                       )}
                     </p>
-                    <p className="text-sm">{project.techStack}</p>
+                    <p className="text-sm">{project?.techStack || "Technologies"}</p>
                   </div>
-                  <ul className="list-disc pl-5 text-sm">
-                    {formatDescription(project.description)}
-                  </ul>
-                </div>
-              )
-          )}
-        </div>
-      )}
-
-      {/* Skills Section */}
-      {skills.some((skill) => skill.ProgrammingLanguages || skill.CoreCompetencies || skill.Frameworks || skill.TechStack || skill.DeveloperTools || skill.AdditionalSkills) && (
-        <div className="mt-4">
-          <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Skills</h2>
-          {skills.map(
-            (skill, index) =>
-              (skill.ProgrammingLanguages || skill.CoreCompetencies || skill.Frameworks || skill.TechStack || skill.DeveloperTools || skill.AdditionalSkills) && (
-                <div key={index}>
-                  <p className="text-sm">
-                    <strong>Programming Languages: </strong>
-                    {skill.ProgrammingLanguages}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Core competencies: </strong>
-                    {skill.CoreCompetencies}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Frameworks/Libraries: </strong>
-                    {skill.Frameworks}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Tech Stack: </strong>
-                    {skill.TechStack}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Developers' Tool: </strong>
-                    {skill.DeveloperTools}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Additional Skills: </strong>
-                    {skill.AdditionalSkills}
-                  </p>
+                  {project?.description && (
+                    <ul className="list-disc pl-5 text-sm">
+                      {formatDescription(project.description)}
+                    </ul>
+                  )}
                 </div>
               )
           )}
@@ -186,11 +177,11 @@ const ResumeTemplate1 = ({ formData }) => {
       )}
 
       {/* Honors & Awards Section */}
-      {honors.some((honor) => honor) && (
+      {safeHonors.some(honor => honor) && (
         <div className="mt-4">
           <h2 className="text-md font-semibold border-b border-black pb-1 uppercase">Honors & Awards</h2>
           <ul className="list-disc pl-5 text-sm">
-            {honors.map(
+            {safeHonors.map(
               (honor, index) =>
                 honor && <li key={index}>{honor}</li>
             )}
