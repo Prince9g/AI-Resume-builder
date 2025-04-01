@@ -14,41 +14,41 @@ const MyResumes = ({ onEdit }) => {
   const dispatch = useDispatch();
   console.log(resumes);
   const handleDownload = async (resumeData, event) => {
-  //   event.stopPropagation();
+    event.stopPropagation();
     
-  //   try {
-  //     // Create a temporary div to render the resume for PDF generation
-  //     const tempDiv = document.createElement("div");
-  //     tempDiv.style.width = "794px"; // A4 width in pixels
-  //     tempDiv.style.height = "1123px"; // A4 height in pixels
-  //     tempDiv.style.padding = "40px";
-  //     tempDiv.style.backgroundColor = "white";
-  //     document.body.appendChild(tempDiv);
+    try {
+      // Create a temporary div to render the resume for PDF generation
+      const tempDiv = document.createElement("div");
+      tempDiv.style.width = "794px"; // A4 width in pixels
+      tempDiv.style.height = "1123px"; // A4 height in pixels
+      tempDiv.style.padding = "40px";
+      tempDiv.style.backgroundColor = "white";
+      document.body.appendChild(tempDiv);
       
-  //     // Render the resume template
-  //     // const root = ReactDOM.createRoot(tempDiv);
-  //     // root.render(<ResumeTemplate1 formData={resumeData} />);
-  //     console.log(resumes);
+      // Render the resume template
+      // const root = ReactDOM.createRoot(tempDiv);
+      // root.render(<ResumeTemplate1 formData={resumeData} />);
+      console.log(resumes);
       
-  //     const opt = {
-  //       margin: [10, 10, 10, 10],
-  //       filename: `${resumeData.name || "Resume"}.pdf`,
-  //       image: { type: "jpeg", quality: 0.98 },
-  //       html2canvas: { scale: 2 },
-  //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-  //     };
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: `${resumeData.name || "Resume"}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      };
 
-  //     await html2pdf()
-  //       .set(opt)
-  //       .from(tempDiv)
-  //       .save();
+      await html2pdf()
+        .set(opt)
+        .from(tempDiv)
+        .save();
         
-  //     document.body.removeChild(tempDiv);
-  //     root.unmount();
-  //   } catch (error) {
-  //     console.error("Error generating PDF:", error);
-  //   }
-  // };
+      document.body.removeChild(tempDiv);
+      root.unmount();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+  };
 
   // const handleDelete = async (resumeId, event) => {
   //   event.stopPropagation();
@@ -66,7 +66,7 @@ const MyResumes = ({ onEdit }) => {
   //   } catch (error) {
   //     console.error("Error deleting resume:", error);
   //   }
-  };
+  // };
 
   // if (loading) {
   //   return (
