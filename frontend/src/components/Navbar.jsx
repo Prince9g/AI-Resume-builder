@@ -34,7 +34,7 @@ const Navbar = () => {
         <div className="flex justify-center items-center text-lg gap-8">
             <div className="relative group">
             <a href="#" className="border rounded-xl px-3 py-1 bg-sky-50">Menu</a>
-            <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white text-indigo-600 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white text-indigo-600 rounded-md shadow-lg hidden group-hover:block transition duration-300">
               <Link to="/dashboard/my-resumes" className="block px-4 py-2 hover:bg-gray-100">My Resumes</Link>
               <a href="#" className="block px-4 py-2 hover:bg-gray-100">History</a>
               <a href="#" className="block px-4 py-2 hover:bg-gray-100">Settings</a>
@@ -46,7 +46,7 @@ const Navbar = () => {
             <div>
                 <div className="relative group cursor-pointer">
                     <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg" alt="user" className="rounded-full w-12 h-12"/>
-                    <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white text-indigo-600 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white text-indigo-600 rounded-md shadow-lg hidden group-hover:block transition duration-300">
                         <a href="#" className="block px-4 py-2 hover:bg-gray-100">Profile</a>
                         <a href="#" className="block px-4 py-2 hover:bg-gray-100">
                             <div className="flex justify-between items-center" onClick={onLogoutHandler}>
