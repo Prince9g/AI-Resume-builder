@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineFileDownload, MdDelete, MdEdit } from "react-icons/md";
 import html2pdf from "html2pdf.js";
 import ResumeTemplate1 from "./ResumeTemplate1";
@@ -14,6 +14,23 @@ const MyResumes = ({ onEdit }) => {
   const dispatch = useDispatch();
   console.log(resumes);
   const handleDownload = async (resumeData, event) => {
+    useEffect(()=>{
+      const fetchResumes = async () => {
+        try {
+          const res = await axios.get("http://localhost:8080/api/resume/user-resumes", {
+            withCredentials: true,
+          });
+          console.log(res);
+          dispatch(setAuthUser({
+            resumes: res.data.resumes
+          }));
+        } catch (error) {
+          console.error("Error fetching resumes:", error);
+        }
+      };
+      
+      fetchResumes();
+    },[]);
     event.stopPropagation();
     
     try {

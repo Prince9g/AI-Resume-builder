@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setAuthUser } from '../redux/authSlice';
 const SignUp = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({name: '', email: '', password: '', confirmPassword: ''});
   const onChangeHandler = (event) => {
@@ -16,7 +17,6 @@ const SignUp = () => {
     if(formData.password !== formData.confirmPassword){
       toast.error("Passwords do not match!");
     }
-    const dispatch = useDispatch();
     try {
       const res = await axios.post("http://localhost:8080/api/auth/register", formData
       )

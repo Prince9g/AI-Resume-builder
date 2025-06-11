@@ -21,6 +21,7 @@ export const register = async (req, res) => {
     await user.save();
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
     user = await User.findOne({ email }).select('-password');
+    const resumes = await Resume.find({ user: user._id });
     return res.cookie('token', token, {httpOnly:true, sameSite:'strict', maxAge: 1*24*60*60*1000}).json({
         message:`${user.name} registered successfully`,
         success:true,

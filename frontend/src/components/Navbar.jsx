@@ -12,7 +12,7 @@ const Navbar = () => {
       dispatch(logoutUser());
       setTimeout(()=>{
         navigate('/');
-      }, 3000);
+      }, 1000);
     }
   return (
     <div className="flex justify-between items-center p-4 bg-sky-100">
