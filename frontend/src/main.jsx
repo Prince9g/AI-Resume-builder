@@ -14,7 +14,8 @@ import Homepage from './components/Homepage.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import AI from './components/AI.jsx';
 import MyResumes from './components/MyResumes.jsx';
-import ResumeAIHelper from './components/ResumeAIhelper.jsx';
+import ResumeAIHelper from './components/ResumeAIHelper.jsx';
+import ProtectedRoutes from './components/ProtectedRoutes.jsx';
 
 const router = createBrowserRouter([
   {
@@ -29,11 +30,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <Dashboard />,
+    element: <ProtectedRoutes><Dashboard /></ProtectedRoutes>,
     children: [
       { path: 't1', element: <Templates /> },
       { path: 't1/build', element: <Builder /> },
-      { path: 'ai', element: <ResumeAIHelper /> },
+      { path: 'ai', element: <ResumeAIHelper/> },
       {path: 'my-resumes', element: <MyResumes/> },
     ],
   },

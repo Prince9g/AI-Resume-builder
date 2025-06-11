@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Upload, Download, Edit3, Zap, FileText, Loader2 } from "lucide-react";
 import run from './API';
 
-const ResumeATSEnhancer = () => {
+const ResumeAIHelper = () => {
   const [jd, setJd] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
   const [resumeContent, setResumeContent] = useState("");
@@ -376,4 +376,4 @@ Format your response with clear headings and bullet points.`;
   );
 };
 
-export default ResumeATSEnhancer;
+export default ResumeAIHelper;
