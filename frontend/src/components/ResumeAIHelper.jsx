@@ -1,6 +1,11 @@
 import React, { useState, useRef } from "react";
 import { Upload, Download, Edit3, Zap, FileText, Loader2 } from "lucide-react";
 import run from './API';
+import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
+import Tesseract from "tesseract.js";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
 
 const ResumeAIHelper = () => {
   const [jd, setJd] = useState("");
@@ -11,68 +16,79 @@ const ResumeAIHelper = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [step, setStep] = useState("input"); // "input", "uploaded", "analyzed"
   const fileInputRef = useRef(null);
+  const [text, setText] = useState("");
 
   // Extract text from different file types
-  const extractTextFromFile = (file) => {
-    return new Promise((resolve, reject) => {
-      if (file.type === "application/pdf") {
-        // Dynamically import PDF.js for client-side only
-        import("pdfjs-dist/build/pdf").then((pdfjs) => {
-          pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-          
-          const reader = new FileReader();
-          reader.onload = async (event) => {
-            try {
-              const typedArray = new Uint8Array(event.target.result);
-              const pdf = await pdfjs.getDocument(typedArray).promise;
-              let fullText = "";
-              
-              for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
-                const text = textContent.items.map(item => item.str).join(" ");
-                fullText += text + "\n";
-              }
-              
-              resolve(fullText);
-            } catch (error) {
-              reject(error);
-            }
-          };
-          reader.readAsArrayBuffer(file);
-        });
-      } else if (file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || 
-                 file.type === "application/msword") {
-        // Dynamically import Mammoth.js for DOCX files
-        import("mammoth").then((mammoth) => {
-          const reader = new FileReader();
-          reader.onload = async (event) => {
-            try {
-              const result = await mammoth.extractRawText({ arrayBuffer: event.target.result });
-              resolve(result.value);
-            } catch (error) {
-              reject(error);
-            }
-          };
-          reader.readAsArrayBuffer(file);
-        });
-      } else if (file.type === "text/plain") {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          resolve(event.target.result);
+  const extractTextFromFile = async (file) => {
+    try {
+      if (file.type === "application/pdf"){
+        
+        const fileReader = new FileReader();
+        fileReader.onload = async function () {
+          const typedArray = new Uint8Array(this.result);
+          const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+
+          let combinedText = "";
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const viewport = page.getViewport({ scale: 2.0 });
+
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            await page.render({ canvasContext: context, viewport }).promise;
+
+            const {
+              data: { text },
+            } = await Tesseract.recognize(canvas, "eng", {
+              logger: (m) =>
+                console.log(`Tesseract Progress: ${m.status} (${m.progress * 100}%)`),
+            });
+
+            combinedText += `Page ${i}:\n${text}\n\n`;
+          }
+          // console.log("Extracted Text:", combinedText);
+          // setText(combinedText);
         };
-        reader.readAsText(file);
+
+        fileReader.readAsArrayBuffer(file);
+        if(fileReader.readyState === FileReader.DONE) {
+          const text = await fileReader.result;
+          setText(text);
+        }
+        return text;
+      } else if (file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || 
+                file.type === "application/msword") {
+        const mammoth = await import("mammoth");
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        return result.value;
+      } else if (file.type === "text/plain") {
+        return await file.text();
       } else {
-        reject(new Error("Unsupported file type"));
+        throw new Error("Unsupported file type");
       }
-    });
+    } catch (error) {
+      console.error("Error extracting text:", error);
+      throw error;
+    }
   };
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    if (!file.type.match(/(pdf|msword|vnd.openxmlformats-officedocument.wordprocessingml.document|plain)/)) {
+    // Check file type
+    const validTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword",
+      "text/plain"
+    ];
+    
+    if (!validTypes.includes(file.type)) {
       alert("Please upload a PDF, DOCX, or TXT file");
       return;
     }
@@ -165,6 +181,7 @@ Format your response with clear headings and bullet points.`;
     setResumeContent(prev => `${prev}\n\n[Applied Suggestion]: ${suggestion}`);
   };
 
+  // Input screen
   if (step === "input") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
@@ -229,7 +246,9 @@ Format your response with clear headings and bullet points.`;
             <button
               onClick={handleAnalyzeJD}
               disabled={loading || !jd.trim() || !resumeFile}
-              className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+              className={`w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
+                loading || !jd.trim() || !resumeFile ? "opacity-50 cursor-not-allowed" : "hover:from-purple-600 hover:to-indigo-700"
+              }`}
             >
               {loading ? (
                 <>
@@ -249,6 +268,7 @@ Format your response with clear headings and bullet points.`;
     );
   }
 
+  // Results screen (uploaded or analyzed)
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
       {/* Left Panel - AI Suggestions */}
@@ -264,9 +284,25 @@ Format your response with clear headings and bullet points.`;
             </button>
           </div>
           
-          {step === "uploaded" && (
+          {step === "uploaded" && !loading && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
               <p className="text-blue-700">Resume uploaded successfully! Click "Generate AI Suggestions" to analyze.</p>
+              <button
+                onClick={handleAnalyzeJD}
+                className="mt-2 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-4 h-4" />
+                    Generate AI Suggestions
+                  </>
+                )}
+              </button>
             </div>
           )}
 
